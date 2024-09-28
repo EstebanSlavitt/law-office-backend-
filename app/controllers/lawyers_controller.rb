@@ -1,22 +1,18 @@
 class LawyersController < ApplicationController
-  def index
-    @lawyers = Lawyer.all
-    render :index
-  end
+  def update
+    @lawyer = Lawyer.find_by(id: params[:id])
 
-  def create
-    @lawyer = Lawyer.new(lawyer_params)
-
-    if @lawyer.save
-      render :show, status: :created
+    if @lawyer.update(
+      name: params[:name] || @lawyer.name,
+      title: params[:title] || @lawyer.title,
+      bio: params[:bio] || @lawyer.bio,
+      email: params[:email] || @lawyer.email,
+      phone: params[:phone] || @lawyer.phone,
+    )
+      render :show
     else
       render json: { errors: @lawyer.errors.full_messages }, status: :unprocessable_entity
     end
-  end
-
-  def show
-    @lawyer = Lawyer.find(params[:id])
-    render :show
   end
 
   private
